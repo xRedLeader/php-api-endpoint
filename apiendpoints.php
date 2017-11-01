@@ -1,5 +1,6 @@
 <?php
-require_once 'apibase.php';
+require_once __DIR__.'/apibase.php';
+require_once __DIR__.'/oauthfiles/server.php';
 
 class ApiEndpoints extends API
 {
@@ -44,5 +45,22 @@ class ApiEndpoints extends API
             return "Only accepts GET requests";
         }
      }
+
+    // A endpoint for token controller using OAuth2.0
+    protected function token() {
+        global $server;
+        $server->handleTokenRequest(OAuth2\Request::createFromGlobals())->send();
+    }
+
+    // A endpoint for resource controller for OAuth2.0
+    protected function resource() {
+        global $server;
+        // Handle a request to a resource and authenticate the access token
+        if (!$server->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
+            $server->getResponse()->send();
+            die;
+        }
+        echo json_encode(array('success' => true, 'message' => 'You accessed my APIs!'));
+    }
  }
 ?>

@@ -1,0 +1,3 @@
+[submodule "OAuth2Lib"]
+	path = OAuth2Lib
+	url = https://github.com/bshaffer/oauth2-server-php
